@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Display Webcam Stream</title>
+ 
+<style>
+#container {
+	margin: 0px auto;
+	width: 500px;
+	height: 375px;
+	border: 10px #333 solid;
+}
+#videoElement {
+	width: 500px;
+	height: 375px;
+	background-color: #666;
+}
+</style>
+</head>
+ 
+<body>
+    <button id="start-camera">Start Camera</button>
+
+    <script>
+    
+    document.querySelector("#start-camera").addEventListener('click', async function() {
+        // suppose we require a full HD video
+        let constraints = { 
+                            audio: true, 
+                            video: { 
+                                width: { ideal: 4096 }, 
+                                height: { ideal: 2160 } 
+                            }
+                        };
+    
+        let stream = await navigator.mediaDevices.getUserMedia(constraints);
+    
+        console.log("stream")
+        console.log(stream)
+        console.log(stream.getVideoTracks())
+
+        let stream_settings = stream.getVideoTracks()[0].getSettings();
+        console.log("stream_settings")
+        console.log(stream_settings)
+    
+        // actual width & height of the camera video
+        let stream_width = stream_settings.width;
+        let stream_height = stream_settings.height;
+    
+        console.log('Width: ' + stream_width + 'px');
+        console.log('Height: ' + stream_height + 'px');
+    });
+    
+    </script>     
+    </body>
+</html>
