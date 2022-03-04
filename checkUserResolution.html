@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Display Webcam Stream</title>
+
+<style>
+#container {
+	margin: 0px auto;
+	width: 500px;
+	height: 375px;
+	border: 10px #333 solid;
+}
+#videoElement {
+	width: 500px;
+	height: 375px;
+	background-color: #666;
+}
+</style>
+</head>
+ 
+<body>
+    <button id="start-camera">Start Camera</button>
+    <div id="console">
+
+
+    </div>
+    <script>
+    
+    document.querySelector("#start-camera").addEventListener('click', async function() {
+        // suppose we require a full HD video
+        let constraints = { 
+                            audio: true, 
+                            video: { 
+                                width: { ideal: 7680 }, 
+                                height: { ideal: 4320 } 
+                            }
+                        };
+    
+        try{
+
+            /*
+            let SupportedConstraints = await navigator.mediaDevices.getSupportedConstraints()
+
+            console.log("SupportedConstraints")
+            console.log(SupportedConstraints)
+            */
+
+
+            let stream = await navigator.mediaDevices.getUserMedia(constraints);
+    
+            console.log("stream")
+            console.log(stream)
+
+
+            
+            const videoTracks = stream.getVideoTracks()
+
+            console.log(videoTracks)
+            
+            console.log("videoTracks map")
+            videoTracks.map(element =>{
+
+                getSettings = element.getSettings()
+                console.log(getSettings)
+
+                const entries = Object.entries(getSettings);
+
+                entries.map(element2 =>{
+                    printConsole(element2[0]+":"+element2[1])
+                })
+
+                printConsole("<hr>")
+            })
+
+
+            let stream_settings = stream.getVideoTracks()[0].getSettings();
+            console.log("stream_settings")
+            console.log(stream_settings)
+        
+            // actual width & height of the camera video
+            let stream_width = stream_settings.width;
+            let stream_height = stream_settings.height;
+        
+            console.log('resolution: ' + stream_width + 'x' + stream_height);
+            printConsole('resolution: ' + stream_width + 'x' + stream_height)
+        }catch(error){
+            console.error(error)
+            printConsole(error)
+
+        }
+
+
+    });
+
+    function printConsole(inText){
+        let console = document.getElementById("console")
+
+        console.innerHTML += "<br> "+inText
+
+    }
+    
+    </script>     
+    </body>
+</html>
